@@ -9,4 +9,4 @@ npm i nan@2.14.0
 npm i node-pre-gyp@0.14.0
 npm i -g node-gyp@6.1.0
 node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v9.0-win32-x64
-node-gyp rebuild --msvs_version=2015 --target=9.0.0-beta.16 --arch=x64 --target_platform=win32 --dist-url=https://atom.io/download/electron --module_name=node_sqlite3 --module_path=../lib/binding/electron-v9.0-win32-x64
+node-gyp rebuild --msvs_version=2015 --target=9.0.0-beta.22 --arch=x64 --target_platform=win32 --dist-url=https://atom.io/download/electron --module_name=node_sqlite3 --module_path=../lib/binding/electron-v9.0-win32-x64
