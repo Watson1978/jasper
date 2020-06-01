@@ -4,4 +4,4 @@ npm i nan@2.14.0
 npm i node-pre-gyp@0.14.0
 npm i -g node-gyp@6.1.0
 node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v9.0-linux-x64
-node-gyp rebuild --target=9.0.0-beta.22 --arch=x64 --target_platform=linux --dist-url=https://atom.io/download/electron --module_name=node_sqlite3 --module_path=../lib/binding/electron-v9.0-linux-x64
+node-gyp rebuild --target=9.0.0 --arch=x64 --target_platform=linux --dist-url=https://atom.io/download/electron --module_name=node_sqlite3 --module_path=../lib/binding/electron-v9.0-linux-x64
