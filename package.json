@@ -30,7 +30,7 @@
     "semver": "5.5.1",
     "sqlite3": "5.1.7",
     "styled-components": "5.1.1",
-    "uuid": "8.3.2"
+    "uuid": "11.1.0"
   },
   "devDependencies": {
     "@electron/packager": "^18.4.4",
