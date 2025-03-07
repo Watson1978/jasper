@@ -63,7 +63,10 @@ class _BrowserViewBind {
     BrowserViewIPC.onSetBackgroundColor(color => this.active.browserView.setBackgroundColor(color));
 
     [this.main.browserView.webContents, this.issue.browserView.webContents].forEach(webContents => {
-      webContents.addListener('console-message', (_ev, level, message) => BrowserViewIPC.eventConsoleMessage(level, message));
+      webContents.addListener('console-message', (event) => {
+        const { level, message } = event;
+        BrowserViewIPC.eventConsoleMessage(Number(level), message)
+      });
       webContents.addListener('dom-ready', () => BrowserViewIPC.eventDOMReady());
       webContents.addListener('did-start-navigation', (_ev, url, inPage) => BrowserViewIPC.eventDidStartNavigation(url, inPage));
       webContents.addListener('did-navigate', () => BrowserViewIPC.eventDidNavigate());
@@ -135,7 +138,8 @@ class _BrowserViewBind {
       target.browserView.webContents.executeJavaScript(js);
     });
 
-    webContents.addListener('console-message', (_ev, _level, message) => {
+    webContents.addListener('console-message', (event) => {
+      const { message } = event;
       if (message.indexOf('CONTEXT_MENU:') !== 0) return;
 
       const data = JSON.parse(message.split('CONTEXT_MENU:')[1]);
