@@ -45,10 +45,10 @@ class _BrowserViewBind {
     BrowserViewIPC.onGetURL(() => this.getURL());
     BrowserViewIPC.onHide((_ev, flag) => this.hide(flag));
     BrowserViewIPC.onReload(async () => this.active.browserView.webContents.reload());
-    BrowserViewIPC.onCanGoBack(() => this.active.browserView.webContents.canGoBack());
-    BrowserViewIPC.onCanGoForward(() => this.active.browserView.webContents.canGoForward());
-    BrowserViewIPC.onGoBack(async () => this.active.browserView.webContents.goBack());
-    BrowserViewIPC.onGoForward(async () => this.active.browserView.webContents.goForward());
+    BrowserViewIPC.onCanGoBack(() => this.active.browserView.webContents.navigationHistory.canGoBack());
+    BrowserViewIPC.onCanGoForward(() => this.active.browserView.webContents.navigationHistory.canGoForward());
+    BrowserViewIPC.onGoBack(async () => this.active.browserView.webContents.navigationHistory.goBack());
+    BrowserViewIPC.onGoForward(async () => this.active.browserView.webContents.navigationHistory.goForward());
     BrowserViewIPC.onFocus(async () => this.active.browserView.webContents.focus());
     BrowserViewIPC.onBlur(async () => this.active.window.webContents.focus());
     BrowserViewIPC.onExecuteJavaScript((_ev, js) => this.active.browserView.webContents.executeJavaScript(js));
