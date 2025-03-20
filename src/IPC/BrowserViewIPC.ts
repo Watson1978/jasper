@@ -213,6 +213,9 @@ class _BrowserViewIPC {
 
   // event console-message
   eventConsoleMessage(level: number, message: string) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventConsoleMessage, level, message);
   }
 
@@ -222,6 +225,9 @@ class _BrowserViewIPC {
 
   // event dom-ready
   eventDOMReady() {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventDOMReady);
   }
 
@@ -255,6 +261,9 @@ class _BrowserViewIPC {
 
   // event did-navigate-in-page
   eventDidNavigateInPage() {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventDidNavigateInPage);
   }
 
@@ -264,6 +273,9 @@ class _BrowserViewIPC {
 
   // event before-input-event
   eventBeforeInput(input) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventBeforeInput, input);
   }
 
@@ -273,6 +285,9 @@ class _BrowserViewIPC {
 
   // event found-in-page
   eventFoundInPage(result: Electron.Result) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventFoundInPage, result);
   }
 
@@ -282,6 +297,9 @@ class _BrowserViewIPC {
 
   // event will-download
   eventWillDownload() {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventWillDownload);
   }
 
@@ -291,6 +309,9 @@ class _BrowserViewIPC {
 
   // open issue window
   eventOpenIssueWindow(url: string) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(Channels.eventOpenIssueWindow, url);
   }
 
