@@ -94,6 +94,7 @@ class _BrowserViewBind {
       title: 'Jasper',
       titleBarStyle: 'hiddenInset',
       webPreferences: {
+        backgroundThrottling: false,
         nodeIntegration: false,
         sandbox: false,
         preload: PathUtil.getPath('/Renderer/asset/html/issue-window-preload.js'),
@@ -115,6 +116,7 @@ class _BrowserViewBind {
   private setupWindow(target: Target) {
     target.browserView = new BrowserView({
       webPreferences: {
+        backgroundThrottling: false,
         nodeIntegration: false,
         sandbox: false,
       }
