@@ -70,6 +70,7 @@ class _BrowserViewService {
       title: 'Jasper',
       titleBarStyle: 'hiddenInset',
       webPreferences: {
+        backgroundThrottling: false,
         nodeIntegration: false,
         preload: PathUtil.getPath('/Renderer/Preload/issue-window-preload.js'),
       },
@@ -90,6 +91,7 @@ class _BrowserViewService {
   private setupWindow(target: Target) {
     target.browserView = new BrowserView({
       webPreferences: {
+        backgroundThrottling: false,
         nodeIntegration: false,
       }
     });
