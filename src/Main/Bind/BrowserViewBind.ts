@@ -1,4 +1,4 @@
-import {BrowserView, BrowserWindow, clipboard, Menu, MenuItem, Rectangle, shell} from 'electron';
+import {BrowserView, BrowserWindow, clipboard, Menu, MenuItem, Rectangle, session, shell} from 'electron';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -169,6 +169,8 @@ class _BrowserViewBind {
   }
 
   private loadURL(url: string) {
+    session.defaultSession.clearCache();
+
     // ロードが呼び出されたら強制的に非表示を無効にする
     this.active.hideCount = 0;
     this.hide(false);
