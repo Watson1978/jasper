@@ -8,22 +8,22 @@ set -euo pipefail
 # コードサイン
 # electron v6.0.7から厳密にすべてのnativeコードにcodesignが必要になった
 # asar化まえにcodesignする必要があるので、ここで実行する
-codesign \
--s "Developer ID Application: Ryo Maruyama (G3Z4F76FBZ)" \
--f \
---options runtime \
---entitlements ./misc/plist/notarization.plist \
-./out/release/node_modules/sqlite3/lib/binding/napi-v6-darwin-unknown-arm64/node_sqlite3.node
+# codesign \
+# -s "Developer ID Application: Ryo Maruyama (G3Z4F76FBZ)" \
+# -f \
+# --options runtime \
+# --entitlements ./misc/plist/notarization.plist \
+# ./out/release/node_modules/sqlite3/lib/binding/napi-v6-darwin-unknown-arm64/node_sqlite3.node
 
 # アイコンをビルド
-iconutil -c icns ./misc/logo/jasper.iconset --output ./misc/logo/jasper.icns
+# iconutil -c icns ./misc/logo/jasper.iconset --output ./misc/logo/jasper.icns
 
 # バージョンを取得
 VERSION=$(node -e 'console.log(require("./package.json").version)')
 
 # notarize用のID/Passwordを取得
-APPLE_ID=$(node -e 'console.log(require(`${process.env.HOME}/.apple/notarize-account.json`).id)')
-APPLE_PASSWORD=$(node -e 'console.log(require(`${process.env.HOME}/.apple/notarize-account.json`).password)')
+# APPLE_ID=$(node -e 'console.log(require(`${process.env.HOME}/.apple/notarize-account.json`).id)')
+# APPLE_PASSWORD=$(node -e 'console.log(require(`${process.env.HOME}/.apple/notarize-account.json`).password)')
 
 # electron-packagerでビルド
 rm -rf ./out/release-pp
@@ -32,8 +32,8 @@ npx @electron/packager ./out/release Jasper \
   --asar \
   --overwrite \
   --icon=./misc/logo/jasper.icns \
-  --platform=darwin \
-  --arch=arm64 \
+  --platform=linux \
+  --arch=x64 \
   --out=./out/release-app \
   --app-bundle-id=io.jasperapp \
   --helper-bundle-id=io.jasperapp.helper \
@@ -42,14 +42,14 @@ npx @electron/packager ./out/release Jasper \
   --protocol=jasperapp \
   --protocol-name=jasperapp-protocol \
   --app-copyright=RyoMaruyama \
-  --osx-sign.identity="Developer ID Application: Ryo Maruyama (G3Z4F76FBZ)" \
-  --osx-sign.type=distribution \
-  --osx-sign.hardenedRuntime=true \
-  --osx-sign.entitlements="./misc/plist/notarization.plist" \
-  --osx-sign.entitlements-inherit="./misc/plist/notarization.plist" \
-  --osx-notarize.appleId="$APPLE_ID" \
-  --osx-notarize.appleIdPassword="$APPLE_PASSWORD" \
-  --osx-notarize.teamId="G3Z4F76FBZ" \
+  # --osx-sign.identity="Developer ID Application: Ryo Maruyama (G3Z4F76FBZ)" \
+  # --osx-sign.type=distribution \
+  # --osx-sign.hardenedRuntime=true \
+  # --osx-sign.entitlements="./misc/plist/notarization.plist" \
+  # --osx-sign.entitlements-inherit="./misc/plist/notarization.plist" \
+  # --osx-notarize.appleId="$APPLE_ID" \
+  # --osx-notarize.appleIdPassword="$APPLE_PASSWORD" \
+  # --osx-notarize.teamId="G3Z4F76FBZ" \
 
 # ------------------------------------------
 # code sign, notarize関連のリンク
