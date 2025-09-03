@@ -29,9 +29,8 @@ VERSION=$(node -e 'console.log(require("./package.json").version)')
 rm -rf ./out/release-pp
 export DEBUG="electron-osx-sign* electron-packager* electron-notarize*"
 npx @electron/packager ./out/release Jasper \
-  --asar \
   --overwrite \
-  --icon=./misc/logo/jasper.icns \
+  --icon=./misc/logo/jasper.iconset/icon_256x256.png \
   --platform=linux \
   --arch=x64 \
   --out=./out/release-app \
@@ -42,6 +41,7 @@ npx @electron/packager ./out/release Jasper \
   --protocol=jasperapp \
   --protocol-name=jasperapp-protocol \
   --app-copyright=RyoMaruyama \
+  # --asar \
   # --osx-sign.identity="Developer ID Application: Ryo Maruyama (G3Z4F76FBZ)" \
   # --osx-sign.type=distribution \
   # --osx-sign.hardenedRuntime=true \

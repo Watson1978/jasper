@@ -38,6 +38,7 @@ class _MainWindow {
       y: mainWindowState.y || 0,
       width: mainWindowState.width,
       height: mainWindowState.height,
+      icon: nodePath.join(__dirname, 'Renderer/asset/image/icon.png'),
     };
 
     const mainWindow = new BrowserWindow(options);
