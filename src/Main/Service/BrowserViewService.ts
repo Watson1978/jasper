@@ -154,10 +154,16 @@ class _BrowserViewService {
   }
 
   eventConsoleMessage(level: number, message: string) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventConsoleMessage, level, message);
   }
 
   eventDOMReady() {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventDOMReady);
   }
 
@@ -176,22 +182,37 @@ class _BrowserViewService {
   }
 
   eventDidNavigateInPage() {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventDidNavigateInPage);
   }
 
   eventBeforeInput(input) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventBeforeInput, input);
   }
 
   eventFoundInPage(result: Electron.Result) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventFoundInPage, result);
   }
 
   eventWillDownload() {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventWillDownload);
   }
 
   eventOpenIssueWindow(url: string) {
+    // TODO: Avoid "Uncaught Exception" error
+    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
+
     this.window.webContents.send(BrowserViewIPCChannels.eventOpenIssueWindow, url);
   }
 
