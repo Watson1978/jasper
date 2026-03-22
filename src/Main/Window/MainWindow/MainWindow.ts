@@ -34,6 +34,7 @@ class _MainWindow {
         backgroundThrottling: false,
         nodeIntegration: false,
         preload: nodePath.join(__dirname, 'Renderer/Preload/main-window-preload.js'),
+        spellcheck: false,
       },
       x: mainWindowState.x || 0,
       y: mainWindowState.y || 0,

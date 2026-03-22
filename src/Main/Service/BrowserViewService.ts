@@ -73,6 +73,7 @@ class _BrowserViewService {
         backgroundThrottling: false,
         nodeIntegration: false,
         preload: PathUtil.getPath('/Renderer/Preload/issue-window-preload.js'),
+        spellcheck: false,
       },
       parent: this.main.window,
       show: false,
@@ -93,6 +94,7 @@ class _BrowserViewService {
       webPreferences: {
         backgroundThrottling: false,
         nodeIntegration: false,
+        spellcheck: false,
       }
     });
     target.window?.setBrowserView(target.browserView);
