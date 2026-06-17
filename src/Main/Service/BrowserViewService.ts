@@ -4,8 +4,6 @@ import nodePath from 'node:path';
 import os from 'os';
 import {BrowserViewIPCChannels} from '../../IPC/BrowserViewIPC/BrowserViewIPC.channel';
 import {ShellUtil} from '../../Renderer/Library/Util/ShellUtil';
-import {PathUtil} from '../Util/PathUtil';
-import {MainWindowMenu} from '../Window/MainWindow/MainWindowMenu';
 import {browserViewMc} from './BrowserViewTranslateService';
 
 type Target = {
@@ -25,23 +23,18 @@ class _BrowserViewService {
     hideCount: 0,
   };
 
-  private issue: Target = {
-    window: null,
-    browserView: null,
-    rect: null,
-    zoomFactor: 1,
-    hideCount: 0,
-  };
-
   private window: BrowserWindow;
   private active: Target = this.main;
 
   initWindow(window: BrowserWindow) {
     this.window = window;
     this.setupMainWindow(window);
-    this.setupIssueWindow();
 
-    [this.main.browserView.webContents, this.issue.browserView.webContents].forEach(webContents => {
+    // Phase B: かつて存在した IssueWindow（別ウィンドウでIssueを開く機能）は、
+    // GitHub Project のサイドパネル表示への移行に伴い廃止済み。
+    // 起動時に常駐していた「隠しBrowserWindow + BrowserView + issue-window.html
+    // レンダラ」を生成しないことで、未使用プロセス分のメモリを削減する。
+    [this.main.browserView.webContents].forEach(webContents => {
       webContents.addListener('console-message', (_ev, level, message) => BrowserViewService.eventConsoleMessage(level, message));
       webContents.addListener('dom-ready', () => BrowserViewService.eventDOMReady());
       webContents.addListener('did-start-navigation', (_ev, url, inPage) => BrowserViewService.eventDidStartNavigation(url, inPage));
@@ -63,32 +56,6 @@ class _BrowserViewService {
     //   this.openIssueWindow(details.url);
     //   return {action: 'deny'};
     // });
-  }
-
-  private setupIssueWindow() {
-    this.issue.window = new BrowserWindow({
-      title: 'Jasper',
-      titleBarStyle: 'hiddenInset',
-      webPreferences: {
-        // github.com ページ表示用。ポーリングは行わないため、非表示時は
-        // スロットリングを効かせてバックグラウンドのタイマー/描画を抑制する。
-        backgroundThrottling: true,
-        nodeIntegration: false,
-        preload: PathUtil.getPath('/Renderer/Preload/issue-window-preload.js'),
-        spellcheck: false,
-      },
-      parent: this.main.window,
-      show: false,
-    });
-
-    this.issue.window.webContents.setUserAgent(this.main.window.webContents.userAgent);
-    this.issue.window.loadFile(nodePath.join(__dirname, `Renderer/asset/html/issue-window.html`));
-    this.issue.window.setBrowserView(this.issue.browserView);
-    this.issue.window.addListener('close', (ev) => {
-      ev.preventDefault();
-      this.closeIssueWindow();
-    });
-    this.setupWindow(this.issue);
   }
 
   private setupWindow(target: Target) {
@@ -216,13 +183,6 @@ class _BrowserViewService {
     this.window.webContents.send(BrowserViewIPCChannels.eventWillDownload);
   }
 
-  eventOpenIssueWindow(url: string) {
-    // TODO: Avoid "Uncaught Exception" error
-    if (this.window.isDestroyed() || this.window.webContents.isDestroyed()) return;
-
-    this.window.webContents.send(BrowserViewIPCChannels.eventOpenIssueWindow, url);
-  }
-
   loadURL(url: string) {
     session.defaultSession.clearCache();
 
@@ -332,13 +292,6 @@ class _BrowserViewService {
     }
   }
 
-  private closeIssueWindow() {
-    this.issue.window.hide();
-    this.issue.browserView.webContents.loadFile(nodePath.join(__dirname, `Main/asset/html/empty.html`));
-    this.active = this.main;
-    BrowserViewService.initWindow(this.main.window);
-    MainWindowMenu.enableShortcut(true);
-  }
 }
 
 export const BrowserViewService = new _BrowserViewService();
