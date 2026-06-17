@@ -39,9 +39,11 @@ async function index() {
   await app.whenReady();
 
   // 開発時のアイコンを設定
+  // app.dock は macOS 専用。Linux/Windows では undefined のため、ガードしないと
+  // ここで例外が発生し、以降の MainWindow.init() に到達せずウィンドウが開かない。
   if (process.env.JASPER === 'DEV') {
     const iconPath = nodePath.join(__dirname, 'Main/asset/image/jasper-dev.png');
-    app.dock.setIcon(nativeImage.createFromPath(iconPath));
+    app.dock?.setIcon(nativeImage.createFromPath(iconPath));
   }
 
   // メインウィンドウを生成
