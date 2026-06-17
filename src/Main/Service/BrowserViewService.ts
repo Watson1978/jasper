@@ -70,7 +70,9 @@ class _BrowserViewService {
       title: 'Jasper',
       titleBarStyle: 'hiddenInset',
       webPreferences: {
-        backgroundThrottling: false,
+        // github.com ページ表示用。ポーリングは行わないため、非表示時は
+        // スロットリングを効かせてバックグラウンドのタイマー/描画を抑制する。
+        backgroundThrottling: true,
         nodeIntegration: false,
         preload: PathUtil.getPath('/Renderer/Preload/issue-window-preload.js'),
         spellcheck: false,
@@ -92,7 +94,10 @@ class _BrowserViewService {
   private setupWindow(target: Target) {
     target.browserView = new BrowserView({
       webPreferences: {
-        backgroundThrottling: false,
+        // github.com 表示用の BrowserView。Issue一覧を見ている間は非表示になる。
+        // ポーリングは main window 側の renderer が担うため、ここは非表示時に
+        // スロットリングして CPU/メモリを節約しても通知取得に影響しない。
+        backgroundThrottling: true,
         nodeIntegration: false,
         spellcheck: false,
       }

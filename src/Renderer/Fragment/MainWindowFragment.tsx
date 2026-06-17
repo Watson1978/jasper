@@ -492,3 +492,17 @@ export const GlobalStyle = createGlobalStyle`
 window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<MainWindowFragment/>, document.querySelector('#root'));
 });
+
+// Phase A: ウィンドウが非表示（最小化/オクルージョン）になったら、少し待ってから
+// 手動GCを促し、renderer のヒープを解放する。
+// `globalThis.gc` は main プロセスで指定した `--expose-gc`（js-flags）により有効化される。
+// ポーリングは backgroundThrottling:false により非表示中も継続するため影響しない。
+{
+  let gcTimer: ReturnType<typeof setTimeout> | null = null;
+  document.addEventListener('visibilitychange', () => {
+    if (gcTimer) clearTimeout(gcTimer);
+    if (!document.hidden) return;
+    // すぐ復帰するケースで無駄打ちしないよう、数秒待ってから実行する。
+    gcTimer = setTimeout(() => (globalThis as any).gc?.(), 5 * 1000);
+  });
+}
