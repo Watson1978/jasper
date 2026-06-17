@@ -19,6 +19,25 @@ class _IssueRepo {
     for (const issue of issues) issue.value = JSON.parse(issue.value as any);
   }
 
+  // Phase C: リスト表示用にメモリを軽量化した relations。
+  // 一覧（getIssuesInStream など）はページングで蓄積し、ストリームによっては
+  // 数百件が state に常駐するため、1件あたりの本文(Markdown)重複保持を削る。
+  //
+  // GitHub の Issue/PR 本文は 1件につき 4 重に保持されている:
+  //   flat: body / read_body / prev_read_body, さらに parse 後の value.body
+  // このうちレンダラが実際に参照するのは body（差分表示の現在本文）と
+  // read_body（差分表示の既読時点本文）のみ。残り2つは未参照なので破棄する。
+  //   - value.body         : DBSetup の書き込み以外で参照されない
+  //   - prev_read_body     : DB層以外（描画/差分/選択）で参照されない
+  private async relationsForList(issues: IssueEntity[]) {
+    for (const issue of issues) {
+      const value = JSON.parse(issue.value as any);
+      if (value != null) delete value.body;
+      issue.value = value;
+      issue.prev_read_body = '';
+    }
+  }
+
   async getIssues(issueIds: number[]): Promise<{error?: Error; issues?: IssueEntity[]}> {
     const {error, rows: issues} = await DB.select<IssueEntity>(`select * from issues where id in (${issueIds.join(',')})`);
     if (error) return {error};
@@ -55,7 +74,7 @@ class _IssueRepo {
     if (e2) return {error: e2};
 
     const hasNextPage = page * perPage + perPage < countRow.count;
-    await this.relations(issues);
+    await this.relationsForList(issues);
     return {issues, totalCount: countRow.count, hasNextPage};
   }
 
@@ -65,7 +84,7 @@ class _IssueRepo {
                                                                 order by updated_at desc limit 100`);
     if (error) return {error};
 
-    await this.relations(issues);
+    await this.relationsForList(issues);
     return {issues};
   }
 
@@ -76,7 +95,7 @@ class _IssueRepo {
                                                                 order by updated_at desc limit ${limit}`);
     if (error) return {error};
 
-    await this.relations(issues);
+    await this.relationsForList(issues);
     return {issues};
   }
 
