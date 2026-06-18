@@ -149,7 +149,6 @@ export class PrefCoverFragment extends React.Component<Props, State> {
           onClose={() => this.setState({showContextMenu: false})}
           menus={this.menus}
           pos={this.contextMenuPos}
-          hideBrowserView={false}
         />
       </React.Fragment>
     );

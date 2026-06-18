@@ -1,5 +1,4 @@
 import {contextBridge, ipcRenderer} from 'electron';
-import {browserViewIPCExpose} from '../../IPC/BrowserViewIPC/BrowserViewIPC.expose';
 import {electronIPCExpose} from '../../IPC/ElectronIPC/ElectronIPC.expose';
 import {mainWindowIPCExpose} from '../../IPC/MainWindowIPC/MainWindowIPC.expose';
 import {nodeIPCExpose} from '../../IPC/NodeIPC/NodeIPC.expose';
@@ -15,7 +14,6 @@ declare global {
 
 contextBridge.exposeInMainWorld('ipc', {
   ...mainWindowIPCExpose.ipc,
-  ...browserViewIPCExpose.ipc,
   ...streamIPCExpose.ipc,
   ...SQLiteIPCExpose.ipc,
   ...nodeIPCExpose.ipc,

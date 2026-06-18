@@ -162,7 +162,6 @@ export class StreamRow extends React.Component<Props, State> {
           pos={this.contextMenuPos}
           onClose={() => this.setState({showMenu: false})}
           menus={this.menus}
-          hideBrowserView={false}
         />
       </Root>
     );

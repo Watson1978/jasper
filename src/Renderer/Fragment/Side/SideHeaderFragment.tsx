@@ -61,10 +61,8 @@ export class SideHeaderFragment extends React.Component<Props, State> {
 
   private handleKeyboardShortcuts() {
     if (this.state.showKeyboardShortcuts) {
-      window.ipc.browserView.hide(false);
       this.setState({showKeyboardShortcuts: false});
     } else {
-      window.ipc.browserView.hide(true);
       this.setState({showKeyboardShortcuts: true});
     }
   }

@@ -66,7 +66,6 @@ export class IssueRow extends React.Component<Props, State> {
   private contextMenus: ContextMenuType[] = [];
   private contextMenuPos: { left: number; top: number };
   private contextMenuHorizontalLeft: boolean;
-  private contextMenuHideBrowserView: boolean;
 
   shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, _nextContext: any): boolean {
     if (nextState.showMenu !== this.state.showMenu) return true;
@@ -187,17 +186,10 @@ export class IssueRow extends React.Component<Props, State> {
     if (this.props.disableMenu) return;
 
     // todo: だいぶ雑な実装なので適切に計算するようにしたい
-    const issueRect = (ReactDOM.findDOMNode(this) as HTMLElement).getBoundingClientRect();
     if (horizontalLeft) {
       this.contextMenuHorizontalLeft = horizontalLeft;
-      this.contextMenuHideBrowserView = false;
     } else {
       this.contextMenuHorizontalLeft = false;
-      if (ev.clientX - issueRect.x < issueRect.width / 4) { // 左1/4をクリックしてたらブラウザを隠さなくても良い
-        this.contextMenuHideBrowserView = false;
-      } else {
-        this.contextMenuHideBrowserView = true;
-      }
     }
 
     const hideUnsubscribe = !this.props.onUnsubscribe;
@@ -250,7 +242,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Issues', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openIssues()},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -275,7 +266,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Project', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openProject(projectField.projectUrl)},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -300,7 +290,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Milestone', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openMilestone()},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -325,7 +314,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Label', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openLabel(label)},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -350,7 +338,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Author', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openUser(this.props.issue.author)},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -375,7 +362,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Assignee', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openUser(loginName)},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -405,7 +391,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Review Requested', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openUser(loginName)},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -430,7 +415,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Review', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openUser(loginName)},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -455,7 +439,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Org/User', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openOrg()},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -480,7 +463,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Repository', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openRepo()},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -505,7 +487,6 @@ export class IssueRow extends React.Component<Props, State> {
       {label: 'Open Issue/PR', subLabel: `(${PlatformUtil.select('⌘', 'Shift')} Click)`, icon: 'open-in-new', handler: () => this.openIssue()},
     ];
 
-    this.contextMenuHideBrowserView = true;
     this.contextMenuHorizontalLeft = false;
     this.contextMenuPos = {top: ev.clientY, left: ev.clientX};
     this.setState({showMenu: true});
@@ -584,7 +565,6 @@ export class IssueRow extends React.Component<Props, State> {
           onClose={() => this.setState({showMenu: false})}
           menus={this.contextMenus}
           pos={this.contextMenuPos}
-          hideBrowserView={this.contextMenuHideBrowserView}
           horizontalLeft={this.contextMenuHorizontalLeft}
         />
       </Root>

@@ -24,16 +24,11 @@ export class Modal extends React.Component<Props, State> {
       if (this.props.show && ev.key === 'Escape') this.handleClose();
     };
     window.addEventListener('keyup', this.onKeyup);
-
-    if (this.props.show) window.ipc.browserView.hide(true);
   }
 
   componentDidUpdate(prevProps: Readonly<Props>, _prevState: Readonly<State>, _snapshot?: any) {
     if (this.props.show && !prevProps.show) {
-      window.ipc.browserView.hide(true);
       if (this.props.fixedTopPosition) this.fixedTopPosition();
-    } else if (!this.props.show && prevProps.show) {
-      window.ipc.browserView.hide(false);
     }
   }
 

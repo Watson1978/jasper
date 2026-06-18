@@ -274,7 +274,6 @@ export class UserStreamsFragment extends React.Component<Props, State> {
           onClose={() => this.setState({contextMenuShow: false})}
           pos={this.contextMenuPos}
           menus={this.contextMenus}
-          hideBrowserView={false}
         />
 
         <StreamEditorFragment

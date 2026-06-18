@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import {IssueChannels} from '../../../IPC/IssueIPC/IssueIPC.channel';
-import {BrowserEvent} from '../../Event/BrowserEvent';
 import {IssueEvent} from '../../Event/IssueEvent';
 import {StreamEvent} from '../../Event/StreamEvent';
 import {appTheme} from '../../Library/Style/appTheme';
@@ -10,6 +9,7 @@ import {border, fontWeight, space} from '../../Library/Style/layout';
 import {IssueEntity} from '../../Library/Type/IssueEntity';
 import {RemoteProjectFieldEntity} from '../../Library/Type/RemoteGitHubV3/RemoteIssueEntity';
 import {StreamEntity} from '../../Library/Type/StreamEntity';
+import {ShellUtil} from '../../Library/Util/ShellUtil';
 import {TimerUtil} from '../../Library/Util/TimerUtil';
 import {ClickView} from '../../Library/View/ClickView';
 import {HorizontalResizer} from '../../Library/View/HorizontalResizer';
@@ -458,7 +458,8 @@ export class IssuesFragment extends React.Component<Props, State> {
   }
 
   private handleOpenProjectBoard() {
-    if (this.state.stream?.type === 'ProjectStream') BrowserEvent.emitOpenProjectBoard(this.state.stream);
+    // 内部ブラウザは廃止したため、プロジェクトボードは外部ブラウザで開く
+    if (this.state.stream?.type === 'ProjectStream') ShellUtil.openExternal(this.state.stream.queries[0]);
   }
 
   private handleResize(diff: number) {

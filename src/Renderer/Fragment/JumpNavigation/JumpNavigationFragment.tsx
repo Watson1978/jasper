@@ -65,7 +65,6 @@ export class JumpNavigationFragment extends React.Component<Props, State> {
   }
 
   private async init() {
-    window.ipc.browserView.blur();
     const keyword = this.props.initialKeyword || '';
     this.setState({keyword, allStreams: [], items: [], focusItem: null});
     if (keyword) {

@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styled, {createGlobalStyle} from 'styled-components';
-import {BrowserViewIPCChannels} from '../../IPC/BrowserViewIPC/BrowserViewIPC.channel';
 import {MainWindowIPCChannels} from '../../IPC/MainWindowIPC/MainWindowIPC.channel';
 import {StreamIPCChannels} from '../../IPC/StreamIPC/StreamIPC.channel';
 import {AppEvent} from '../Event/AppEvent';
-import {IssueEvent} from '../Event/IssueEvent';
 import {StreamEvent} from '../Event/StreamEvent';
 import {UserPrefEvent} from '../Event/UserPrefEvent';
 import {GitHubV4IssueClient} from '../Library/GitHub/V4/GitHubV4IssueClient';
@@ -13,7 +11,6 @@ import {DB} from '../Library/Infra/DB';
 import {appTheme} from '../Library/Style/appTheme';
 import {border, font} from '../Library/Style/layout';
 import {UserPrefEntity} from '../Library/Type/UserPrefEntity';
-import {GitHubUtil} from '../Library/Util/GitHubUtil';
 import {PlatformUtil} from '../Library/Util/PlatformUtil';
 import {TimerUtil} from '../Library/Util/TimerUtil';
 import {Loading} from '../Library/View/Loading';
@@ -43,8 +40,6 @@ import {PrefScopeErrorFragment} from './Pref/PrefScopeErrorFragment';
 import {PrefSetupFragment} from './Pref/PrefSetupFragment';
 import {PrefUnauthorizedFragment} from './Pref/PrefUnauthorizedFragment';
 import {SideFragment} from './Side/SideFragment';
-// 2ペイン化: 内部ブラウザは廃止。
-// import {BrowserFragment} from './Browser/BrowserFragment';
 import {LibraryStreamsFragment} from './Stream/LibraryStream/LibraryStreamsFragment';
 import {SystemStreamsFragment} from './Stream/SystemStream/SystemStreamsFragment';
 import {UserStreamsFragment} from './Stream/UserStream/UserStreamsFragment';
@@ -112,8 +107,6 @@ class MainWindowFragment extends React.Component<Props, State> {
 
     window.ipc.on(StreamIPCChannels.selectNextStream, () => this.handleNextPrevStream(1));
     window.ipc.on(StreamIPCChannels.selectPrevStream, () => this.handleNextPrevStream(-1));
-
-    window.ipc.on(BrowserViewIPCChannels.eventOpenIssueWindow, (_ev, url) => this.handleOpenIssueWindow(url));
 
     window.addEventListener('online',  () => navigator.onLine === true && this.handleStartPolling());
     window.addEventListener('offline',  () => this.handleStopPolling());
@@ -238,22 +231,6 @@ class MainWindowFragment extends React.Component<Props, State> {
     await TimerUtil.sleep(100);
     this.setState({prefSwitchingStatus: 'complete'}, () => this.selectFirstStream());
     UserPrefEvent.emitSwitchPref();
-  }
-
-  private async handleOpenIssueWindow(url: string) {
-    const host = UserPrefRepo.getPref().github.webHost;
-    if (GitHubUtil.isIssueUrl(host, url)) {
-      // get issue
-      const {repo, issueNumber} = GitHubUtil.getInfo(url);
-      const {error: e1, issue} = await IssueRepo.getIssueByIssueNumber(repo, issueNumber);
-      if (e1 != null) return console.error(e1);
-
-      // update issue
-      const {error: e2, issue: updatedIssue} = await IssueRepo.updateRead(issue.id, new Date());
-      if (e2 != null) return console.error(e2);
-
-      IssueEvent.emitUpdateIssues([updatedIssue], [issue], 'read');
-    }
   }
 
   private handleNextPrevStream(direction: 1 | -1) {
@@ -400,9 +377,8 @@ class MainWindowFragment extends React.Component<Props, State> {
             <SystemStreamsFragment ref={ref => this.systemStreamsFragmentRef = ref}/>
             <UserStreamsFragment ref={ref => this.userStreamsFragmentRef = ref}/>
           </SideFragment>
+          {/* 2ペイン構成: サイドバー＋リスト。内部ブラウザ（旧3ペイン目）は廃止し、Issueは外部ブラウザで開く。 */}
           <IssuesFragment className='app-issues-column'/>
-          {/* 2ペイン化: 内部ブラウザ（3ペイン目）は廃止。Issueは外部ブラウザで開く。 */}
-          {/* <BrowserFragment className='app-browser-column'/> */}
         </Main>
 
         <StreamSetupCardFragment/>

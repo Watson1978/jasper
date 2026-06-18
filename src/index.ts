@@ -1,13 +1,11 @@
 import {app, nativeImage} from 'electron';
 import nodePath from 'node:path';
-import {browserViewIPCBind} from './IPC/BrowserViewIPC/BrowserViewIPC.bind';
 import {electronIPCBind} from './IPC/ElectronIPC/ElectronIPC.bind';
 import {mainWindowIPCBind} from './IPC/MainWindowIPC/MainWindowIPC.bind';
 import {nodeIPCBind} from './IPC/NodeIPC/NodeIPC.bind';
 import {SQLiteIPCBind} from './IPC/SQLiteIPC/SQLiteIPC.bind';
 import {streamIPCBind} from './IPC/StreamIPC/StreamIPC.bind';
 import {userPrefIPCBind} from './IPC/UserPrefIPC/UserPrefIPC.bind';
-import {BrowserViewService} from './Main/Service/BrowserViewService';
 import {IssueService} from './Main/Service/IssueService';
 import {MainWindowService} from './Main/Service/MainWindowService';
 import {StreamService} from './Main/Service/StreamService';
@@ -52,13 +50,11 @@ async function index() {
 
   // 各種サービスを初期化
   MainWindowService.initWindow(window);
-  BrowserViewService.initWindow(window);
   IssueService.initWindow(window);
   StreamService.initWindow(window);
 
   // bind IPC
   mainWindowIPCBind(window);
-  browserViewIPCBind();
   streamIPCBind();
   SQLiteIPCBind();
   userPrefIPCBind();

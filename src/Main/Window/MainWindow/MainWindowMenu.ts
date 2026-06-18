@@ -1,5 +1,4 @@
 import {app, dialog, Menu, MenuItemConstructorOptions, Notification, shell,} from 'electron';
-import {BrowserViewService} from '../../Service/BrowserViewService';
 import {IssueService} from '../../Service/IssueService';
 import {MainWindowService} from '../../Service/MainWindowService';
 import {SQLiteService} from '../../Service/SQLiteService';
@@ -58,7 +57,6 @@ class _MainWindowMenu {
     this.currentZoom = Math.max(this.currentZoom, 0.05);
 
     MainWindow.getWindow().webContents.setZoomFactor(this.currentZoom);
-    BrowserViewService.setZoomFactor(this.currentZoom);
   }
 
   private openPrefDir() {
@@ -240,30 +238,6 @@ class _MainWindowMenu {
         ]
       },
       {
-        label: mainWindowMc().browser.title,
-        submenu: [
-          {label: mainWindowMc().browser.reload, accelerator: 'CmdOrCtrl+R', click: () => BrowserViewService.getWebContents()?.reload()},
-          {label: mainWindowMc().browser.back, accelerator: 'CmdOrCtrl+[', click: () => BrowserViewService.getWebContents()?.goBack()},
-          {label: mainWindowMc().browser.forward, accelerator: 'CmdOrCtrl+]', click: () => BrowserViewService.getWebContents()?.goForward()},
-          {type: 'separator'},
-          {
-            label: mainWindowMc().browser.scroll.title, submenu: [
-              // note: spaceキーでのスクロールでsmoothするとちらつく（デフォルトの挙動とぶつかってる？)
-              {label: mainWindowMc().browser.scroll.down, accelerator: 'Space', click: () => BrowserViewService.scroll(60, 'auto')},
-              {label: mainWindowMc().browser.scroll.up, accelerator: 'Shift+Space', click: () => BrowserViewService.scroll(-60, 'auto')},
-              {type: 'separator'},
-              {label: mainWindowMc().browser.scroll.longDown, accelerator: 'Alt+J', click: () => BrowserViewService.scroll(600, 'smooth')},
-              {label: mainWindowMc().browser.scroll.longUp, accelerator: 'Alt+K', click: () => BrowserViewService.scroll(-600, 'smooth')},
-            ]
-          },
-          {type: 'separator'},
-          {label: mainWindowMc().browser.search, accelerator: 'CmdOrCtrl+F', click: () => BrowserViewService.startSearch()},
-          {type: 'separator'},
-          {label: mainWindowMc().browser.location, accelerator: 'CmdOrCtrl+L', click: () => BrowserViewService.focusURLInput()},
-          {label: mainWindowMc().browser.open, accelerator: 'CmdOrCtrl+O', click: () => BrowserViewService.openURLWithExternalBrowser()}
-        ]
-      },
-      {
         label: mainWindowMc().window.title, role: 'window',
         submenu: [
           {label: mainWindowMc().window.zoom.in, accelerator: 'CmdOrCtrl+Plus', click: this.zoom.bind(this, 0.05, false)},
@@ -286,7 +260,6 @@ class _MainWindowMenu {
         label: 'Dev',
         submenu: [
           {label: 'DevTools(Main)', click: () => MainWindow.getWindow().webContents.openDevTools({mode: 'detach'})},
-          {label: 'DevTools(BrowserView)', click: () => BrowserViewService.getWebContents()?.openDevTools({mode: 'detach'})},
           {type: 'separator'},
           {label: 'Open Data Directory', click: () => this.openPrefDir()},
           {type: 'separator'},

@@ -75,22 +75,6 @@ type MessageCatalog = {
       bookmark: string;
     };
   };
-  browser: {
-    title: string;
-    reload: string;
-    back: string;
-    forward: string;
-    scroll: {
-      title: string;
-      down: string;
-      up: string;
-      longDown: string;
-      longUp: string;
-    };
-    search: string;
-    location: string;
-    open: string;
-  };
   window: {
     title: string;
     zoom: {
@@ -182,22 +166,6 @@ const enMessageCatalog: MessageCatalog = {
       bookmark: 'Filter Bookmark',
     },
   },
-  browser: {
-    title: 'Browser',
-    reload: 'Reload',
-    back: 'Back',
-    forward: 'Forward',
-    scroll: {
-      title: 'Scroll',
-      down: 'Scroll Down',
-      up: 'Scroll Up',
-      longDown: 'Scroll Long Down',
-      longUp: 'Scroll Long Up',
-    },
-    search: 'Search Keyword',
-    location: 'Open Location',
-    open: 'Open with External',
-  },
   window: {
     title: 'Window',
     zoom: {
@@ -287,22 +255,6 @@ const jaMessageCatalog: MessageCatalog = {
       open: 'オープンしているIssues',
       bookmark: 'ブックマークしているIssues',
     },
-  },
-  browser: {
-    title: 'ブラウザ',
-    reload: '再読み込み',
-    back: '戻る',
-    forward: '進む',
-    scroll: {
-      title: 'スクロール',
-      down: '下にスクロール',
-      up: '上にスクロール',
-      longDown: '下に大きくスクロール',
-      longUp: '上に大きくスクロール',
-    },
-    search: 'キーワード検索',
-    location: 'アドレスバーを開く',
-    open: '外部ブラウザで開く',
   },
   window: {
     title: 'ウィンドウ',

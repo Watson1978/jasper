@@ -26,7 +26,6 @@ type Props = {
   pos: {top: number; left: number};
   onClose: () => void;
   menus: ContextMenuType[];
-  hideBrowserView?: boolean;
   horizontalLeft?: boolean;
 }
 
@@ -34,17 +33,9 @@ type State = {
 }
 
 export class ContextMenu extends React.Component<Props, State> {
-  static defaultProps = {hideBrowserView: true};
-
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDownBind);
     window.addEventListener('blur', this.handleBlurBind);
-  }
-
-  componentDidUpdate(prevProps: Readonly<Props>, _prevState: Readonly<State>, _snapshot?: any) {
-    if (this.props.show && !prevProps.show) {
-      if (this.props.hideBrowserView) window.ipc.browserView.hide(true);
-    }
   }
 
   componentWillUnmount() {
@@ -62,9 +53,6 @@ export class ContextMenu extends React.Component<Props, State> {
 
   private handleClose() {
     this.props.onClose();
-
-    // メニュー表示時にbrowser viewをhideしていた場合に限り、hideを解除する(hideがカウントロックなため)
-    if (this.props.hideBrowserView) window.ipc.browserView.hide(false);
   }
 
   private async handleMenu(menu: ContextMenuType) {
