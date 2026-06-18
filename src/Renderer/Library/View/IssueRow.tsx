@@ -492,13 +492,9 @@ export class IssueRow extends React.Component<Props, State> {
     this.setState({showMenu: true});
   }
 
-  private handleSelect(ev: React.MouseEvent) {
-    if (this.isOpenRequest(ev)) {
-      ShellUtil.openExternal(this.props.issue.value.html_url);
-      return;
-    }
-
+  private handleSelect(_ev: React.MouseEvent) {
     this.props.onSelect(this.props.issue);
+    ShellUtil.openExternal(this.props.issue.value.html_url);
   }
 
   private handleToggleRead() {
