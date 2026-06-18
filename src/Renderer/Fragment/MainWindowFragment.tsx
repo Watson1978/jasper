@@ -29,7 +29,6 @@ import {DBSetup} from '../Repository/Setup/DBSetup';
 import {StreamSetup} from '../Repository/Setup/StreamSetup';
 import {StreamRepo} from '../Repository/StreamRepo';
 import {UserPrefRepo} from '../Repository/UserPrefRepo';
-import {BrowserFragment} from './Browser/BrowserFragment';
 import {IssuesFragment} from './Issues/IssuesFragment';
 import {JumpNavigationFragment} from './JumpNavigation/JumpNavigationFragment';
 import {LoggerFragment} from './Log/LoggerFragment';
@@ -44,6 +43,8 @@ import {PrefScopeErrorFragment} from './Pref/PrefScopeErrorFragment';
 import {PrefSetupFragment} from './Pref/PrefSetupFragment';
 import {PrefUnauthorizedFragment} from './Pref/PrefUnauthorizedFragment';
 import {SideFragment} from './Side/SideFragment';
+// 2ペイン化: 内部ブラウザは廃止。
+// import {BrowserFragment} from './Browser/BrowserFragment';
 import {LibraryStreamsFragment} from './Stream/LibraryStream/LibraryStreamsFragment';
 import {SystemStreamsFragment} from './Stream/SystemStream/SystemStreamsFragment';
 import {UserStreamsFragment} from './Stream/UserStream/UserStreamsFragment';
@@ -400,7 +401,8 @@ class MainWindowFragment extends React.Component<Props, State> {
             <UserStreamsFragment ref={ref => this.userStreamsFragmentRef = ref}/>
           </SideFragment>
           <IssuesFragment className='app-issues-column'/>
-          <BrowserFragment className='app-browser-column'/>
+          {/* 2ペイン化: 内部ブラウザ（3ペイン目）は廃止。Issueは外部ブラウザで開く。 */}
+          {/* <BrowserFragment className='app-browser-column'/> */}
         </Main>
 
         <StreamSetupCardFragment/>
@@ -449,14 +451,18 @@ const Root = styled(View)`
   height: 100vh;
   border-top: solid ${PlatformUtil.isMac() ? 0 : border.medium}px ${() => appTheme().border.normal};
   
-  &.app-layout-one .app-streams-column, &.app-layout-one .app-issues-column {
-    display: none;
+  /* 2ペイン化: 内部ブラウザ（app-browser-column）は廃止。
+     リスト列は余白を埋めて画面を100%占有する。 */
+  & .app-issues-column {
+    flex: 1;
   }
-  
+
+  /* layout-one / layout-two: サイドバーを隠してリストのみ表示する */
+  &.app-layout-one .app-streams-column,
   &.app-layout-two .app-streams-column {
     display: none;
   }
-  
+
   &.app-pref-switching-loading {
     opacity: 0.3;
   }

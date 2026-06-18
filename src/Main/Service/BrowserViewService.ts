@@ -30,6 +30,11 @@ class _BrowserViewService {
     this.window = window;
     this.setupMainWindow(window);
 
+    // 2ペイン化: 内部ブラウザ（github.com 表示用の BrowserView）は廃止した。
+    // BrowserView を生成しなくなったため webContents も存在せず、イベント購読は行わない。
+    // これにより BrowserView 由来のレンダラプロセスが起動せず、メモリを削減できる。
+    if (this.main.browserView == null) return;
+
     // Phase B: かつて存在した IssueWindow（別ウィンドウでIssueを開く機能）は、
     // GitHub Project のサイドパネル表示への移行に伴い廃止済み。
     // 起動時に常駐していた「隠しBrowserWindow + BrowserView + issue-window.html
@@ -59,28 +64,36 @@ class _BrowserViewService {
   }
 
   private setupWindow(target: Target) {
-    target.browserView = new BrowserView({
-      webPreferences: {
-        // github.com 表示用の BrowserView。Issue一覧を見ている間は非表示になる。
-        // ポーリングは main window 側の renderer が担うため、ここは非表示時に
-        // スロットリングして CPU/メモリを節約しても通知取得に影響しない。
-        backgroundThrottling: true,
-        nodeIntegration: false,
-        spellcheck: false,
-      }
-    });
-    target.window?.setBrowserView(target.browserView);
-    target.browserView.setBackgroundColor('#fff');
-
-    // zoom factorはURLを読み込んでからではないと取得できないため、dom-readyをハンドルしている
-    target.window?.webContents.once('dom-ready', () => {
-      this.setZoomFactor(target.window.webContents.getZoomFactor());
-    });
+    // 2ペイン化: 内部ブラウザ（github.com 表示用の BrowserView）は廃止した。
+    // BrowserView を生成すると専用のレンダラプロセスが常駐してメモリを消費するため、
+    // 生成・アタッチは行わない。target.browserView は null のまま保持する
+    //（各メソッドは null ガード済み。setupContextMenu も内部で早期 return する）。
+    //
+    // target.browserView = new BrowserView({
+    //   webPreferences: {
+    //     // github.com 表示用の BrowserView。Issue一覧を見ている間は非表示になる。
+    //     // ポーリングは main window 側の renderer が担うため、ここは非表示時に
+    //     // スロットリングして CPU/メモリを節約しても通知取得に影響しない。
+    //     backgroundThrottling: true,
+    //     nodeIntegration: false,
+    //     spellcheck: false,
+    //   }
+    // });
+    // target.window?.setBrowserView(target.browserView);
+    // target.browserView.setBackgroundColor('#fff');
+    //
+    // // zoom factorはURLを読み込んでからではないと取得できないため、dom-readyをハンドルしている
+    // target.window?.webContents.once('dom-ready', () => {
+    //   this.setZoomFactor(target.window.webContents.getZoomFactor());
+    // });
 
     this.setupContextMenu(target);
   }
 
   private setupContextMenu(target: Target) {
+    // 2ペイン化により BrowserView は生成されないため、コンテキストメニューの設定は不要。
+    if (target.browserView == null) return;
+
     const webContents = target.browserView.webContents;
     webContents.addListener('dom-ready', () => {
       const jsFilePath = nodePath.join(__dirname, 'Main/asset/js/context-menu.js');
@@ -252,14 +265,17 @@ class _BrowserViewService {
   }
 
   scroll(amount: number, behavior: 'smooth' | 'auto') {
+    if (this.active.browserView == null) return;
     this.active.browserView.webContents.executeJavaScript(`window.scrollBy({top: ${amount}, behavior: '${behavior}'})`);
   }
 
+  // 2ペイン化により BrowserView は生成されないため null を返しうる。呼び出し側は `?.` でガードすること。
   getWebContents() {
-    return this.active.browserView.webContents;
+    return this.active.browserView?.webContents ?? null;
   }
 
   setZoomFactor(factor) {
+    if (this.active.browserView == null) return;
     this.active.browserView.webContents.setZoomFactor(factor);
     this.active.zoomFactor = factor;
   }
@@ -279,6 +295,8 @@ class _BrowserViewService {
   }
 
   hide(enable) {
+    // 2ペイン化により BrowserView は存在しないため、表示/非表示制御は不要。
+    if (this.active.browserView == null) return;
     if (enable) {
       this.active.hideCount++;
       if (this.active.window.getBrowserViews().find(v => v === this.active.browserView)) {

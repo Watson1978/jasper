@@ -242,9 +242,9 @@ class _MainWindowMenu {
       {
         label: mainWindowMc().browser.title,
         submenu: [
-          {label: mainWindowMc().browser.reload, accelerator: 'CmdOrCtrl+R', click: () => BrowserViewService.getWebContents().reload()},
-          {label: mainWindowMc().browser.back, accelerator: 'CmdOrCtrl+[', click: () => BrowserViewService.getWebContents().goBack()},
-          {label: mainWindowMc().browser.forward, accelerator: 'CmdOrCtrl+]', click: () => BrowserViewService.getWebContents().goForward()},
+          {label: mainWindowMc().browser.reload, accelerator: 'CmdOrCtrl+R', click: () => BrowserViewService.getWebContents()?.reload()},
+          {label: mainWindowMc().browser.back, accelerator: 'CmdOrCtrl+[', click: () => BrowserViewService.getWebContents()?.goBack()},
+          {label: mainWindowMc().browser.forward, accelerator: 'CmdOrCtrl+]', click: () => BrowserViewService.getWebContents()?.goForward()},
           {type: 'separator'},
           {
             label: mainWindowMc().browser.scroll.title, submenu: [
@@ -286,7 +286,7 @@ class _MainWindowMenu {
         label: 'Dev',
         submenu: [
           {label: 'DevTools(Main)', click: () => MainWindow.getWindow().webContents.openDevTools({mode: 'detach'})},
-          {label: 'DevTools(BrowserView)', click: () => BrowserViewService.getWebContents().openDevTools({mode: 'detach'})},
+          {label: 'DevTools(BrowserView)', click: () => BrowserViewService.getWebContents()?.openDevTools({mode: 'detach'})},
           {type: 'separator'},
           {label: 'Open Data Directory', click: () => this.openPrefDir()},
           {type: 'separator'},
