@@ -125,6 +125,9 @@ const Body = styled(ClickView)`
   position: fixed;
   top: 0;
   left: 0;
+  /* fixed要素はleft位置からビューポート右端までで幅が決まり、右端付近だと潰れるため、中身の幅で確定させる */
+  width: max-content;
+  max-width: 90vw;
   background: ${() => appTheme().bg.primary};
   padding: 0 0 ${space.small}px;
   border: solid ${border.medium}px ${() => appTheme().border.normal};
