@@ -38,6 +38,6 @@
     "@types/react-dom": "^19.2.3",
     "electron": "^42.4.1",
     "esbuild": "^0.28.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

@@ -8,6 +8,9 @@
     "sourceMap": true,
     "outDir": "./out/src",
     "noImplicitAny": false,
+    // TypeScript 6.0 から strict が既定で true になったため、従来の挙動
+    // （strictNullChecks / strictPropertyInitialization は無効）を維持するために明示的に false にする
+    "strict": false,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "noImplicitThis": true,
