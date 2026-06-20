@@ -10,6 +10,7 @@ type Props = {
   onClick?: (defaultOnClick: () => void) => void;
   style?: CSSProperties;
   className?: string;
+  children?: React.ReactNode;
 }
 
 type State = {

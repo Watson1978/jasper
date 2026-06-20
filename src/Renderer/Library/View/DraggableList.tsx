@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
+import {DragDropContext, Droppable, Draggable, DropResult} from '@hello-pangea/dnd';
 
 type Props = {
   nodes: ReactNode[];

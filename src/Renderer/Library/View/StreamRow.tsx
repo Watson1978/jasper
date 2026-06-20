@@ -8,7 +8,6 @@ import {appTheme} from '../Style/appTheme';
 import {ClickView} from './ClickView';
 import {ContextMenu, ContextMenuType} from './ContextMenu';
 import {color} from '../Style/color';
-import ReactDOM from 'react-dom';
 import {View} from './View';
 import {Translate} from './Translate';
 
@@ -40,6 +39,7 @@ export class StreamRow extends React.Component<Props, State> {
 
   private menus: ContextMenuType[] = [];
   private contextMenuPos: {top: number; left: number};
+  private readonly rootRef = React.createRef<HTMLDivElement>();
 
   shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, _nextContext: any): boolean {
     if (this.state.showMenu !== nextState.showMenu) return true;
@@ -69,9 +69,9 @@ export class StreamRow extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Readonly<Props>, _prevState: Readonly<State>, _snapshot?: any) {
     // 選択されたときには強制的に表示領域に入るようにする
     if (!prevProps.selected && this.props.selected) {
-      const el = ReactDOM.findDOMNode(this) as HTMLDivElement;
+      const el = this.rootRef.current;
       // @ts-ignore
-      el.scrollIntoViewIfNeeded(false);
+      el?.scrollIntoViewIfNeeded(false);
     }
   }
 
@@ -143,6 +143,7 @@ export class StreamRow extends React.Component<Props, State> {
 
     return (
       <Root
+        rootRef={this.rootRef}
         title={title}
         className={`${this.props.className} stream-row ${selectedClassName} ${unreadClassName} ${enabledClassName}`}
         onClick={() => this.props.onSelect(this.props.stream)}

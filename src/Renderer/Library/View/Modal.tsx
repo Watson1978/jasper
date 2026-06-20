@@ -1,5 +1,4 @@
 import React, {CSSProperties} from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {appTheme} from '../Style/appTheme';
 import {space} from '../Style/layout';
@@ -11,6 +10,7 @@ type Props = {
   style?: CSSProperties;
   draggable?: boolean;
   fixedTopPosition?: boolean;
+  children?: React.ReactNode;
 }
 
 type State = {
@@ -18,6 +18,7 @@ type State = {
 
 export class Modal extends React.Component<Props, State> {
   private onKeyup;
+  private readonly containerRef = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
     this.onKeyup = (ev) => {
@@ -41,7 +42,8 @@ export class Modal extends React.Component<Props, State> {
   private async fixedTopPosition() {
     // 描画が完了するまでちょっと待つ
     await TimerUtil.sleep(100);
-    const container = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('.modal-container') as HTMLElement;
+    const container = this.containerRef.current;
+    if (!container) return;
     const rect = container.getBoundingClientRect();
     container.style.position = 'absolute';
     container.style.top = `${rect.y}px`;
@@ -59,7 +61,7 @@ export class Modal extends React.Component<Props, State> {
     const draggableClassName = this.props.draggable ? 'modal-draggable' : '';
     return (
       <Root onClick={(ev) => this.handleClose(ev)} className={draggableClassName}>
-        <Container style={this.props.style} onClick={ev => ev.stopPropagation()} className='modal-container'>
+        <Container ref={this.containerRef} style={this.props.style} onClick={ev => ev.stopPropagation()} className='modal-container'>
           {this.props.children}
         </Container>
       </Root>

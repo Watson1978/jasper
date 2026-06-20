@@ -7,6 +7,7 @@ import {appTheme} from '../Style/appTheme';
 type Props = {
   className?: string;
   style?: CSSProperties;
+  children?: React.ReactNode;
 }
 
 type State = {

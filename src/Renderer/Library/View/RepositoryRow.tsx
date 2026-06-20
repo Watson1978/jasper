@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import {ClickView} from './ClickView';
 import {space} from '../Style/layout';
 import {Text} from './Text';
-import ReactDOM from 'react-dom';
 
 type Props = {
   repository: RepositoryEntity;
@@ -20,12 +19,14 @@ type State = {
 }
 
 export class RepositoryRow extends React.Component<Props, State> {
+  private readonly rootRef = React.createRef<HTMLDivElement>();
+
   componentDidUpdate(prevProps: Readonly<Props>, _prevState: Readonly<State>, _snapshot?: any) {
     // 選択されたときには強制的に表示領域に入るようにする
     if (!prevProps.selected && this.props.selected) {
-      const el = ReactDOM.findDOMNode(this) as HTMLDivElement;
+      const el = this.rootRef.current;
       // @ts-ignore
-      el.scrollIntoViewIfNeeded(false);
+      el?.scrollIntoViewIfNeeded(false);
     }
   }
 
@@ -33,7 +34,7 @@ export class RepositoryRow extends React.Component<Props, State> {
     const selectedClassName = this.props.selected ? 'repository-row-selected' : '';
     const iconColor = this.props.selected ? color.white : appTheme().icon.normal;
     return (
-      <Root className={`${selectedClassName} ${this.props.style}`} style={this.props.style}>
+      <Root rootRef={this.rootRef} className={`${selectedClassName} ${this.props.style}`} style={this.props.style}>
         <Icon name='open-in-new' color={iconColor}/>
         <RepositoryText>{this.props.repository.fullName}</RepositoryText>
       </Root>

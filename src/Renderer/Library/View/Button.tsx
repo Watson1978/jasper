@@ -12,6 +12,7 @@ type Props = {
   type?: 'default' | 'primary';
   title?: string;
   disable?: boolean;
+  children?: React.ReactNode;
 }
 
 type State = {

@@ -5,6 +5,7 @@ type Props = {
   className?: string;
   style?: CSSProperties;
   title?: string;
+  children?: React.ReactNode;
 }
 
 type State = {

@@ -11,6 +11,7 @@ import {SideFooterFragment} from './SideFooterFragment';
 
 type Props = {
   className?: string;
+  children?: React.ReactNode;
 }
 
 type State = {

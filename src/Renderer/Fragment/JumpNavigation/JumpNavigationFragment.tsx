@@ -310,7 +310,7 @@ export class JumpNavigationFragment extends React.Component<Props, State> {
 
           <ScrollView
             style={{paddingTop: space.medium}}
-            ref={ref => this.scrollView = ref}
+            ref={ref => { this.scrollView = ref; }}
           >
             {this.renderHistories(histories)}
             {this.renderDivider(streams, issues)}

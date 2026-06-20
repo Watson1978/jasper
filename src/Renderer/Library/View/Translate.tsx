@@ -1057,7 +1057,7 @@ export function mc(): MessageCatalog {
 }
 
 // message内の文字列をvaluesで置き換える
-export function rep(message: string, values: Props['values']): (string | JSX.Element)[] {
+export function rep(message: string, values: Props['values']): (string | React.JSX.Element)[] {
   const msgTokens = message.split(/({.+?})/); // `foo {url1} bar {url2}` => [foo, {url1}, bar, {url2}]
   return msgTokens.map((msgToken, index) => {
     if (msgToken.startsWith('{')) {

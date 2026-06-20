@@ -185,7 +185,7 @@ export class TextInput extends React.Component<Props, State> {
           style={this.props.style}
         >
           <TextInputElement
-            ref={ref => this.htmlInputElement = ref}
+            ref={ref => { this.htmlInputElement = ref; }}
             value={this.props.value}
             onChange={this.handleChange.bind(this)}
             onKeyDown={ev => this.handleKeyDown(ev)}

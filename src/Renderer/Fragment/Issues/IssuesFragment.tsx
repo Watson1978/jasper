@@ -494,7 +494,7 @@ export class IssuesFragment extends React.Component<Props, State> {
 
         <IssuesScrollView
           onEnd={() => this.handleLoadMore()}
-          ref={ref => this.scrollView = ref}
+          ref={ref => { this.scrollView = ref; }}
         >
           {this.renderUpdatedBanner()}
           {this.renderIssues()}
@@ -593,7 +593,7 @@ export class IssuesFragment extends React.Component<Props, State> {
           onReadCurrentAll={() => this.handleReadCurrent()}
           onUnsubscribe={onUnsubscribe}
           onCreateFilterStream={onCreateFilterStream}
-          ref={ref => this.issueRowRefs[issue.id] = ref}
+          ref={ref => { this.issueRowRefs[issue.id] = ref; }}
         />
       );
     });

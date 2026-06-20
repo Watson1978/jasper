@@ -10,11 +10,12 @@ import {color} from '../Style/color';
 
 type Props = {
   isShow: boolean;
-  title: JSX.Element;
+  title: React.JSX.Element;
   onClick: () => void;
   onClose: () => void;
   className?: string;
   style?: React.CSSProperties;
+  children?: React.ReactNode;
 }
 
 export const FloatingCard: React.FC<Props> = (props) => {

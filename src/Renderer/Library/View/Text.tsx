@@ -8,6 +8,7 @@ type Props = {
   className?: string;
   style?: CSSProperties;
   singleLine?: boolean;
+  children?: React.ReactNode;
 }
 
 type State = {

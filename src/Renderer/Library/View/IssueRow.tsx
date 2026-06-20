@@ -1,5 +1,4 @@
 import React, {CSSProperties} from 'react';
-import ReactDOM from 'react-dom';
 import styled, {keyframes} from 'styled-components';
 import {IssueRepo} from '../../Repository/IssueRepo';
 import {appTheme} from '../Style/appTheme';
@@ -66,6 +65,7 @@ export class IssueRow extends React.Component<Props, State> {
   private contextMenus: ContextMenuType[] = [];
   private contextMenuPos: { left: number; top: number };
   private contextMenuHorizontalLeft: boolean;
+  private readonly rootRef = React.createRef<HTMLDivElement>();
 
   shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, _nextContext: any): boolean {
     if (nextState.showMenu !== this.state.showMenu) return true;
@@ -115,9 +115,9 @@ export class IssueRow extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Readonly<Props>, _prevState: Readonly<State>, _snapshot?: any) {
     // 選択されたときには強制的に表示領域に入るようにする
     if (!prevProps.selected && this.props.selected) {
-      const el = ReactDOM.findDOMNode(this) as HTMLDivElement;
+      const el = this.rootRef.current;
       // @ts-ignore
-      el.scrollIntoViewIfNeeded(this.props.scrollIntoViewIfNeededWithCenter);
+      el?.scrollIntoViewIfNeeded(this.props.scrollIntoViewIfNeededWithCenter);
     }
   }
 
@@ -545,6 +545,7 @@ export class IssueRow extends React.Component<Props, State> {
 
     return (
       <Root
+        rootRef={this.rootRef}
         className={`${this.props.className} issue-row ${readClassName} ${selectedClassName} ${fadeInClassName} ${slimClassName}`}
         onClick={ev => this.handleSelect(ev)}
         onContextMenu={(ev) => this.handleContextMenu(ev, false)}

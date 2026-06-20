@@ -8,6 +8,9 @@ type Props = {
   className?: string;
   style?: CSSProperties;
   title?: string;
+  // React 19 で findDOMNode が削除されたため、ルートDOMノードへの参照を受け取れるようにする
+  rootRef?: React.Ref<HTMLDivElement>;
+  children?: React.ReactNode;
 }
 
 type State = {
@@ -35,6 +38,7 @@ export class ClickView extends React.Component<Props, State> {
   render() {
     return (
       <Root
+        ref={this.props.rootRef}
         title={this.props.title}
         onClick={this.handleClick.bind(this)}
         onDoubleClick={this.handleDoubleClick.bind(this)}

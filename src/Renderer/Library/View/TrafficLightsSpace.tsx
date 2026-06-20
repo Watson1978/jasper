@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {AppEvent} from '../../Event/AppEvent';
 import {PlatformUtil} from '../Util/PlatformUtil';
@@ -17,6 +16,8 @@ export class TrafficLightsSpace extends React.Component<Props, State> {
     show: false,
   }
 
+  private readonly rootRef = React.createRef<HTMLDivElement>();
+
   componentDidMount() {
     this.handlePosition();
     AppEvent.onChangedLayout(this, () => this.handlePosition());
@@ -28,7 +29,8 @@ export class TrafficLightsSpace extends React.Component<Props, State> {
 
   private async handlePosition() {
     await TimerUtil.sleep(16);
-    const el = ReactDOM.findDOMNode(this).parentElement as HTMLElement;
+    const el = this.rootRef.current?.parentElement as HTMLElement;
+    if (!el) return;
     const rect = el.getBoundingClientRect();
     if (rect.width && rect.left < TrafficLightSize.width) {
       this.setState({show: true});
@@ -44,7 +46,7 @@ export class TrafficLightsSpace extends React.Component<Props, State> {
   render() {
     const display = PlatformUtil.isMac() && this.state.show ? 'block' : 'none';
     return (
-      <Root style={{display}} onDoubleClick={() => this.handleMaximize()}/>
+      <Root ref={this.rootRef} style={{display}} onDoubleClick={() => this.handleMaximize()}/>
     );
   }
 }

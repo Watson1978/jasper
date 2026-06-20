@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import styled, {createGlobalStyle} from 'styled-components';
 import {MainWindowIPCChannels} from '../../IPC/MainWindowIPC/MainWindowIPC.channel';
 import {StreamIPCChannels} from '../../IPC/StreamIPC/StreamIPC.channel';
@@ -373,9 +373,9 @@ class MainWindowFragment extends React.Component<Props, State> {
         <Main>
           <SideFragment className='app-streams-column'>
             <PrefCoverFragment onSwitchPref={this.handleSwitchPref.bind(this)}/>
-            <LibraryStreamsFragment ref={ref => this.libraryStreamsFragmentRef = ref}/>
-            <SystemStreamsFragment ref={ref => this.systemStreamsFragmentRef = ref}/>
-            <UserStreamsFragment ref={ref => this.userStreamsFragmentRef = ref}/>
+            <LibraryStreamsFragment ref={ref => { this.libraryStreamsFragmentRef = ref; }}/>
+            <SystemStreamsFragment ref={ref => { this.systemStreamsFragmentRef = ref; }}/>
+            <UserStreamsFragment ref={ref => { this.userStreamsFragmentRef = ref; }}/>
           </SideFragment>
           {/* 2ペイン構成: サイドバー＋リスト。内部ブラウザ（旧3ペイン目）は廃止し、Issueは外部ブラウザで開く。 */}
           <IssuesFragment className='app-issues-column'/>
@@ -464,15 +464,9 @@ export const GlobalStyle = createGlobalStyle`
   } 
 `;
 
-// export function mountFragment() {
-//   ReactDOM.render(
-//     <MainWindowFragment/>,
-//     document.querySelector('#root')
-//   );
-// }
-
 window.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<MainWindowFragment/>, document.querySelector('#root'));
+  const root = createRoot(document.querySelector('#root'));
+  root.render(<MainWindowFragment/>);
 });
 
 // Phase A: ウィンドウが非表示（最小化/オクルージョン）になったら、少し待ってから

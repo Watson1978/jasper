@@ -193,7 +193,7 @@ export class IssuesHeaderFragment extends React.Component<Props, State> {
       return (
         <TextInput
           key={index}
-          ref={ref => this.textInput = ref}
+          ref={ref => { this.textInput = ref; }}
           value={filterQuery}
           onChange={t => this.handleSetFilter(t, index)}
           onClear={() => this.handleSetFilter('', index, () => this.handleExecFilter(index))}

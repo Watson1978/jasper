@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {appTheme} from '../Style/appTheme';
 
@@ -9,12 +8,12 @@ interface Props {
 }
 
 export class HorizontalResizer extends React.Component<Props> {
-  private ref;
+  private ref: HTMLElement;
   private onMouseMove;
   private onMouseUp;
 
   handleResizeStart() {
-    const el = (ReactDOM.findDOMNode(this.ref) as HTMLElement);
+    const el = this.ref;
     let rect = el.getBoundingClientRect();
 
     this.onMouseMove = (ev: MouseEvent) => {
@@ -40,7 +39,7 @@ export class HorizontalResizer extends React.Component<Props> {
   }
 
   render() {
-    return <ResizableBorder onMouseDown={this.handleResizeStart.bind(this)} ref={ref => this.ref = ref}/>
+    return <ResizableBorder onMouseDown={this.handleResizeStart.bind(this)} ref={ref => { this.ref = ref; }}/>
   }
 }
 

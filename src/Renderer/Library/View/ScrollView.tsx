@@ -1,6 +1,5 @@
 import React, {CSSProperties} from 'react';
 import styled from 'styled-components';
-import ReactDOM from 'react-dom';
 import {appTheme} from '../Style/appTheme';
 import {border} from '../Style/layout';
 
@@ -8,14 +7,15 @@ type Props = {
   onEnd?: () => void;
   className?: string;
   style?: CSSProperties;
+  children?: React.ReactNode;
 }
 
 type State = {
 }
 
 export class ScrollView extends React.Component<Props, State> {
-  private rootView;
-  private bottomView;
+  private rootView: HTMLElement;
+  private bottomView: HTMLElement;
   private observer: IntersectionObserver;
 
   componentDidMount(): void {
@@ -24,14 +24,14 @@ export class ScrollView extends React.Component<Props, State> {
 
   componentWillUnmount(): void {
     if (this.observer) {
-      this.observer.unobserve(ReactDOM.findDOMNode(this.bottomView) as HTMLElement);
+      this.observer.unobserve(this.bottomView);
       this.observer.disconnect();
     }
   }
 
   private initIntersectionObserver() {
     const options: IntersectionObserverInit = {
-      root: ReactDOM.findDOMNode(this.rootView) as HTMLElement,
+      root: this.rootView,
       rootMargin: '100px',
       threshold: 0,
     };
@@ -45,31 +45,31 @@ export class ScrollView extends React.Component<Props, State> {
       }
     }, options);
 
-    this.observer.observe(ReactDOM.findDOMNode(this.bottomView) as HTMLElement);
+    this.observer.observe(this.bottomView);
   }
 
   scrollTop() {
-    (ReactDOM.findDOMNode(this.rootView) as HTMLElement).scrollTo(0, 0);
+    this.rootView.scrollTo(0, 0);
   }
 
   scrollBottom() {
-    const el = (ReactDOM.findDOMNode(this.rootView) as HTMLElement);
+    const el = this.rootView;
     el.scrollTo(0, el.scrollHeight);
   }
 
   scrollBy(y: number) {
-    (ReactDOM.findDOMNode(this.rootView) as HTMLElement).scrollBy(0, y);
+    this.rootView.scrollBy(0, y);
   }
 
   render() {
     return (
       <Root
-        ref={ref => this.rootView = ref}
+        ref={ref => { this.rootView = ref; }}
         className={this.props.className}
         style={this.props.style}
       >
         {this.props.children}
-        <div ref={ref => this.bottomView = ref}/>
+        <div ref={ref => { this.bottomView = ref; }}/>
       </Root>
     );
   }
