@@ -99,7 +99,7 @@ export class IssuesHeaderFragment extends React.Component<Props, State> {
     const i = (filterQuery: string): IconNameType => {
       const regExp = new RegExp(` *${filterQuery} *`);
       const matched = this.state.filterQueries.some(filterQuery => filterQuery.match(regExp));
-      return matched ? 'check-box-outline' : 'checkbox-blank-outline';
+      return matched ? 'checkbox-outline' : 'checkbox-blank-outline';
     };
 
     this.filterMenus = [
