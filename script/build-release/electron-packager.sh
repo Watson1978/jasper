@@ -30,6 +30,7 @@ rm -rf ./out/release-pp
 export DEBUG="electron-osx-sign* electron-packager* electron-notarize*"
 npx @electron/packager ./out/release Jasper \
   --overwrite \
+  --no-asar \
   --icon=./misc/logo/jasper.iconset/icon_256x256.png \
   --platform=linux \
   --arch=x64 \
